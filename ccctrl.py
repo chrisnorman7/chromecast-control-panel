@@ -4,82 +4,58 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pychromecast import get_chromecasts
 from attr import attrs, attrib, Factory
 parser = ArgumentParser(
-    description=__doc__,
-    formatter_class=ArgumentDefaultsHelpFormatter
+    description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter
 )
 
 parser.add_argument(
-    '--verbose',
-    action='store_true',
-    help='Print more information'
+    '--verbose', action='store_true', help='Print more information'
 )
 
 parser.add_argument(
-    '-d',
-    '--devices',
-    action='append',
-    help='Device(s) to control'
+    '-d', '--devices', action='append', help='Device(s) to control'
 )
 
 parser.add_argument(
-    '-i',
-    '--include-type',
-    action='append',
-    default=[],
-    metavar='TYPE',
+    '-i', '--include-type', action='append', default=[], metavar='TYPE',
     help='Include a cast type (group for example)'
 )
+
 parser.add_argument(
-    '-I',
-    '--ignore-type',
-    action='append',
-    default=[],
-    metavar='TYPE',
+    '-I', '--ignore-type', action='append', default=[], metavar='TYPE',
     help='Ignore a cast type (group for example)'
 )
 
 action_group = parser.add_mutually_exclusive_group()
 action_group.add_argument(
-    '-s',
-    '--show',
-    action='store_true',
-    help='Show info about the target device(s)'
-)
-action_group.add_argument(
-    '-v',
-    '--set-volume',
-    type=float,
-    metavar='VOLUME',
-    help='Set the volume of the target device(s) between 0.0 and 1.0'
-)
-action_group.add_argument(
-    '-m',
-    '--mute',
-    action='store_true',
-    help='Mute the target device(s)'
-)
-action_group.add_argument(
-    '-u',
-    '--unmute',
-    action='store_true',
-    help='Unmute the target device(s)'
-)
-action_group.add_argument(
-    '--volume-up',
-    action='store_true',
-    help='Turn the volume of the target device(s) up a bit'
-)
-action_group.add_argument(
-    '--volume-down',
-    action='store_true',
-    help='Turn the volume of the target device(s) down a bit'
+    '-s', '--show', action='store_true', help='Show info about the target '
+    'device(s)'
 )
 
 action_group.add_argument(
-    '-r',
-    '--reboot',
-    action='store_true',
-    help='Reboot the target device(s)'
+    '-v', '--set-volume', type=float, metavar='VOLUME', help='Set the volume '
+    'of the target device(s) between 0.0 and 1.0'
+)
+
+action_group.add_argument(
+    '-m', '--mute', action='store_true', help='Mute the target device(s)'
+)
+
+action_group.add_argument(
+    '-u', '--unmute', action='store_true', help='Unmute the target device(s)'
+)
+
+action_group.add_argument(
+    '--volume-up', action='store_true', help='Turn the volume of the target '
+    'device(s) up a bit'
+)
+
+action_group.add_argument(
+    '--volume-down', action='store_true', help='Turn the volume of the target '
+    'device(s) down a bit'
+)
+
+action_group.add_argument(
+    '-r', '--reboot', action='store_true', help='Reboot the target device(s)'
 )
 
 
@@ -128,9 +104,9 @@ if __name__ == '__main__':
         if not devices:
             error('No devices found matching %r.' % args.devices)
     devices = [
-        x for x in devices if
-        x.cast_type not in args.ignore_type and
-        (not args.include_type or x.cast_type in args.include_type)
+        x for x in devices if x.cast_type not in args.ignore_type and (
+            not args.include_type or x.cast_type in args.include_type
+        )
     ]
     if not devices:
         error('No devices found matching the specified criteria.')
