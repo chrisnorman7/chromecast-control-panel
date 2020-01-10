@@ -1,7 +1,7 @@
 """Control Chromecast devices from the command line."""
 
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-from pychromecast import get_chromecasts
+from pychromecast import get_chromecasts, PyChromecastError
 from attr import attrs, attrib, Factory
 parser = ArgumentParser(
     description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter
@@ -84,7 +84,10 @@ class Action:
     def run(self, device):
         """Run this action on a device."""
         func = getattr(device, self.name)
-        func(*self.args, **self.kwargs)
+        try:
+            func(*self.args, **self.kwargs)
+        except PyChromecastError as e:
+            print(e)
 
 
 def error(msg):
@@ -131,7 +134,7 @@ if __name__ == '__main__':
         actions.append(Action('volume_down'))
     for d in devices:
         if actions:
-            print('Device: %s.' % d.name)
+            print('Device: %s (%s)' % (d.name, d.cast_type))
             for a in actions:
                 if args.verbose:
                     print('Running %r.' % a)
